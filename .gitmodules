@@ -4,3 +4,6 @@
 [submodule "digital_signal_processing"]
 	path = digital_signal_processing
 	url = https://github.com/ldevlnull/digital_signal_processing.git
+[submodule "discrete_mathematics"]
+	path = discrete_mathematics
+	url = https://github.com/ldevlnull/discrete_mathematics.git
