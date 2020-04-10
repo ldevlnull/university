@@ -1,3 +1,6 @@
 [submodule "computer_graphics"]
 	path = computer_graphics
 	url = https://github.com/ldevlnull/computer_graphics.git
+[submodule "digital_signal_processing"]
+	path = digital_signal_processing
+	url = https://github.com/ldevlnull/digital_signal_processing.git
