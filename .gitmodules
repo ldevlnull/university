@@ -13,3 +13,6 @@
 [submodule "number_analysis"]
 	path = number_analysis
 	url = https://github.com/ldevlnull/number_analysis
+[submodule "operations_research"]
+	path = operations_research
+	url = https://github.com/ldevlnull/operations_research.git
