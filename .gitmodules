@@ -10,3 +10,6 @@
 [submodule "estimation_app"]
 	path = estimation_app
 	url = https://github.com/ldevlnull/estimation_app.git
+[submodule "number_analysis"]
+	path = number_analysis
+	url = https://github.com/ldevlnull/number_analysis
