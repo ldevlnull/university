@@ -7,3 +7,6 @@
 [submodule "discrete_mathematics"]
 	path = discrete_mathematics
 	url = https://github.com/ldevlnull/discrete_mathematics.git
+[submodule "estimation_app"]
+	path = estimation_app
+	url = https://github.com/ldevlnull/estimation_app.git
