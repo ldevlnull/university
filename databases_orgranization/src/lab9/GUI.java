@@ -1,9 +1,7 @@
 package lab9;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -16,8 +14,6 @@ import java.io.PrintWriter;
 import java.sql.*;
 import java.util.*;
 import java.util.List;
-
-import static java.lang.System.out;
 
 public class GUI extends JFrame {
 	private static Connection connection;
@@ -79,6 +75,7 @@ public class GUI extends JFrame {
 		});
 
 		executeButton.addActionListener(event -> {
+			checkConnection();
 			String query = inputArea.getText();
 			if (query.toUpperCase().contains("SELECT")) {
 				performQueryWithReturn(query);
@@ -144,8 +141,8 @@ public class GUI extends JFrame {
 			data.forEach(row -> model.addRow(row.toArray(new String[]{})));
 			resultTable.setModel(model);
 			lastSelectQueryCache = data;
-			lastSelectQueryCache.add(0, columnNames);
 			log("Retrieved " + data.size() + " row(s).");
+			lastSelectQueryCache.add(0, columnNames);
 		} catch (SQLException e) {
 			logError(e.getMessage());
 		}
