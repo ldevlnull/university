@@ -1,6 +1,7 @@
 package lab9;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.text.AttributeSet;
@@ -8,6 +9,10 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.*;
 import java.util.*;
 import java.util.List;
@@ -29,10 +34,14 @@ public class GUI extends JFrame {
 	private JTextPane outputPane;
 	private JScrollPane scrollPane;
 	private JTable resultTable;
+	private JButton exportQueryButton;
+	private JCheckBox includeHeadersCheckBox;
 
 	private String dbUrl;
 	private String dbUserName;
 	private String dbPassword;
+
+	private List<Set<String>> lastSelectQueryCache;
 
 	public GUI() {
 		connectStatusLabel.setText("<html><font color='red'>Not connected!</font></html>");
@@ -77,6 +86,36 @@ public class GUI extends JFrame {
 				performQuery(query);
 			}
 		});
+
+		exportQueryButton.addActionListener(event -> exportToCSV());
+	}
+
+	private void exportToCSV() {
+		if(lastSelectQueryCache == null || lastSelectQueryCache.isEmpty()) {
+			logError("Error during export: nothing to save. Make a SELECT query first!");
+			return;
+		}
+
+		JFileChooser chooser = new JFileChooser();
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		chooser.setApproveButtonText("Save");
+		int res = chooser.showOpenDialog(rootPane);
+		if (res == JFileChooser.APPROVE_OPTION) {
+			File path = chooser.getSelectedFile();
+			if (!path.getName().substring(path.getName().length() - 3).equalsIgnoreCase("csv"))
+				path = new File(path.toString() + ".csv");
+			try (PrintWriter writer = new PrintWriter(new FileWriter(path))) {
+				if (includeHeadersCheckBox.isSelected()) {
+					lastSelectQueryCache.stream().skip(1).forEach(values -> writer.println(values.toString().replaceAll("[\\[\\]]", "")));
+					log(lastSelectQueryCache.size()-1 + " row(s) exported to " + path);
+				} else {
+					lastSelectQueryCache.forEach(values -> writer.println(values.toString().replaceAll("[\\[\\]]", "")));
+					log(lastSelectQueryCache.size() + " row(s) exported to " + path);
+				}
+			} catch (IOException io) {
+				logError(io.getMessage());
+			}
+		}
 	}
 
 	private void performQueryWithReturn(String query) {
@@ -104,6 +143,8 @@ public class GUI extends JFrame {
 			model.setColumnIdentifiers(tableHeaders);
 			data.forEach(row -> model.addRow(row.toArray(new String[]{})));
 			resultTable.setModel(model);
+			lastSelectQueryCache = data;
+			lastSelectQueryCache.add(0, columnNames);
 			log("Retrieved " + data.size() + " row(s).");
 		} catch (SQLException e) {
 			logError(e.getMessage());
