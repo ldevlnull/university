@@ -180,9 +180,9 @@ public class GUI extends JFrame {
 		outputPane.replaceSelection(String.valueOf(msg));
 	}
 
-	private static void checkConnection() {
+	private void checkConnection() {
 		if (connection == null)
-			throw new IllegalStateException("Not connected to database. You need to connect first!");
+			logError("No connection! Connect before execute queries.");
 	}
 
 	private void disconnect() throws SQLException {
@@ -190,7 +190,7 @@ public class GUI extends JFrame {
 		connection = null;
 	}
 
-	private static void registerDriver() {
+	private void registerDriver() {
 		try {
 			Class.forName("org.postgresql.Driver");
 		} catch (ClassNotFoundException e) {

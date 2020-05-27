@@ -145,8 +145,10 @@
           </grid>
         </constraints>
         <properties>
-          <editable value="false"/>
+          <editable value="true"/>
+          <enabled value="true"/>
           <font size="14"/>
+          <text value=""/>
         </properties>
       </component>
       <scrollpane id="3beb5" binding="scrollPane">
